@@ -1,4 +1,4 @@
-import { addElement } from '../../utils/helpers';
+import { addElement, sendEvent } from '../../utils/helpers';
 import { Component } from '../component';
 import html from './homepage.tpl.html';
 
@@ -29,6 +29,11 @@ class Homepage extends Component {
           'Заказ оформлен. Деньги спишутся с вашей карты, менеджер может позвонить, чтобы уточнить детали доставки'
       });
     }
+    sendEvent({
+      type: 'route',
+      payload: { url: window.location.href },
+      timestamp: Date.now().toString()
+    });
   }
 }
 

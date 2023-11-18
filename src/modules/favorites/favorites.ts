@@ -1,5 +1,6 @@
 import { Component } from '../component';
-import html from './catalog.tpl.html';
+import { favoritesService } from '../../services/favorites.service';
+import html from './favorites.tpl.html';
 import { sendEvent } from '../../../src/utils/helpers';
 
 import { ProductList } from '../productList/productList';
@@ -11,13 +12,11 @@ class Catalog extends Component {
     super(props);
 
     this.productList = new ProductList();
-    this.productList.attach(this.view.products);
+    this.productList.attach(this.view.favorites);
   }
 
   async render() {
-    const productsResp = await fetch('/api/getProducts');
-    const products = await productsResp.json();
-    this.productList.update(products);
+    this.productList.update(await favoritesService.get());
 
     sendEvent({
       type: 'route',
@@ -27,4 +26,4 @@ class Catalog extends Component {
   }
 }
 
-export const catalogComp = new Catalog(html);
+export const favoritesComp = new Catalog(html);
