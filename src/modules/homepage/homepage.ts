@@ -3,15 +3,19 @@ import { Component } from '../component';
 import html from './homepage.tpl.html';
 
 import { ProductList } from '../productList/productList';
+import { SearchHints } from '../searchHints/searchHints';
 
 class Homepage extends Component {
   popularProducts: ProductList;
+  searchHints: SearchHints;
 
   constructor(props: any) {
     super(props);
 
     this.popularProducts = new ProductList();
     this.popularProducts.attach(this.view.popular);
+    this.searchHints = new SearchHints(['чехол iphone 13 pro', 'коляски agex', 'яндекс станция 2']);
+    this.searchHints.attach(this.view.searchHints);
   }
 
   render() {
@@ -29,6 +33,7 @@ class Homepage extends Component {
           'Заказ оформлен. Деньги спишутся с вашей карты, менеджер может позвонить, чтобы уточнить детали доставки'
       });
     }
+    this.searchHints.render();
   }
 }
 
