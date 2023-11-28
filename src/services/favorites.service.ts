@@ -11,6 +11,7 @@ class FavoriteService {
   async addFavorite(favorite: ProductData) {
     const isInFavorites = await this.isInFavorites(favorite);
     if (isInFavorites) {
+      this.removeFavorite(favorite);
       return;
     }
     const favorites = await this.get();
