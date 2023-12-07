@@ -1,9 +1,10 @@
 import { Component } from '../component';
 import { ProductList } from '../productList/productList';
-import { formatPrice } from '../../utils/helpers';
+import { formatPrice, sendEvent } from '../../utils/helpers';
 import { ProductData } from 'types';
 import html from './productDetail.tpl.html';
 import { cartService } from '../../services/cart.service';
+import { favoritesService } from '../../services/favorites.service';
 
 class ProductDetail extends Component {
   more: ProductList;
@@ -32,6 +33,7 @@ class ProductDetail extends Component {
     this.view.description.innerText = description;
     this.view.price.innerText = formatPrice(salePriceU);
     this.view.btnBuy.onclick = this._addToCart.bind(this);
+    this.view.btnFav.onclick = this._addToFavorite.bind(this);
 
     const isInCart = await cartService.isInCart(this.product);
 
@@ -48,6 +50,12 @@ class ProductDetail extends Component {
       .then((products) => {
         this.more.update(products);
       });
+
+    sendEvent({
+      type: 'route',
+      payload: { url: window.location.href },
+      timestamp: Date.now().toString()
+    });
   }
 
   private _addToCart() {
@@ -60,6 +68,12 @@ class ProductDetail extends Component {
   private _setInCart() {
     this.view.btnBuy.innerText = '✓ В корзине';
     this.view.btnBuy.disabled = true;
+  }
+
+  private _addToFavorite() {
+    if (!this.product) return;
+
+    favoritesService.addFavorite(this.product);
   }
 }
 
